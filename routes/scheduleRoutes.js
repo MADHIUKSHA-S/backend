@@ -89,33 +89,6 @@ router.get('/test-email', async (req, res) => {
   }
 });
 
-// Schedule a cron job to run every day at midnight
-cron.schedule('* * * * *', async () => {
-  try {
-    console.log('Running daily task reminder check...');
-
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1); // Get the next day's date
-
-    // Find tasks due tomorrow
-    const tasksDueTomorrow = await Schedule.find({
-      dueDate: {
-        $gte: new Date(tomorrow.setHours(0, 0, 0, 0)), // Start of tomorrow
-        $lt: new Date(tomorrow.setHours(23, 59, 59, 999)), // End of tomorrow
-      },
-    }).populate('assignedMembers', 'email'); // Populate assignedMembers with their email addresses
-
-    // Send email notifications to each assigned member
-    for (const task of tasksDueTomorrow) {
-      for (const member of task.assignedMembers) {
-        await sendReminderEmail(member.email, task.title, task.dueDate);
-      }
-    }
-
-    console.log('Reminder emails sent for tasks due tomorrow.');
-  } catch (error) {
-    console.error('Error in cron job:', error);
-  }
-});
+    
 
 module.exports = router;
