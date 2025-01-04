@@ -3,7 +3,7 @@ const Subtask = require('../models/Subtask');  // Your subtask model
 const router = express.Router();
 
 // Route to add a subtask
-router.post('/subtask/:taskId', async (req, res) => {
+router.post('/:taskId', async (req, res) => {
   try {
     const { title, description, dueDate } = req.body;
     const subtask = new Subtask({
@@ -20,7 +20,7 @@ router.post('/subtask/:taskId', async (req, res) => {
 });
 
 // Route to get subtasks by taskId
-router.get('/subtask/:taskId', async (req, res) => {
+router.get('/:taskId', async (req, res) => {
   try {
     const subtasks = await Subtask.find({ taskId: req.params.taskId });
     res.json(subtasks);
@@ -30,7 +30,7 @@ router.get('/subtask/:taskId', async (req, res) => {
 });
 
 // Route to update subtask status
-router.put('/subtask/:subtaskId', async (req, res) => {
+router.put('/:subtaskId', async (req, res) => {
   try {
     const { completed } = req.body;
     const subtask = await Subtask.findByIdAndUpdate(req.params.subtaskId, { completed }, { new: true });
@@ -41,7 +41,7 @@ router.put('/subtask/:subtaskId', async (req, res) => {
 });
 
 // Route to delete a subtask
-router.delete('/subtask/:subtaskId', async (req, res) => {
+router.delete('/:subtaskId', async (req, res) => {
   try {
     await Subtask.findByIdAndDelete(req.params.subtaskId);
     res.status(200).json({ message: 'Subtask deleted' });

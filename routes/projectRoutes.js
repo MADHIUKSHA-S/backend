@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
   // Create a new project
   // Create a new project
-  router.post('/projects', authMiddleware, async (req, res) => {
+  router.post('/', authMiddleware, async (req, res) => {
     console.log("POST /projects request received"); 
   const { title, description, priority, deadline, teamMembersEmails } = req.body; // Fields coming from frontend
 
@@ -55,7 +55,7 @@ const jwt = require('jsonwebtoken');
   });
 // Get all projects for the logged-in user (creator or team member)
 
-router.get('/projects', authMiddleware, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const userId = req.user.id;
   
@@ -85,7 +85,7 @@ router.get('/projects', authMiddleware, async (req, res) => {
 });
 
 // Update project
-router.put('/projects/:id', authMiddleware, async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
   try {
     const { title, description, deadline, teamMembers } = req.body;
     const project = await Project.findOneAndUpdate(
@@ -100,7 +100,7 @@ router.put('/projects/:id', authMiddleware, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-router.put('/projects/:id/reopen', authMiddleware, async (req, res) => {
+router.put('/:id/reopen', authMiddleware, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
     if (!project) {
@@ -124,7 +124,7 @@ router.put('/projects/:id/reopen', authMiddleware, async (req, res) => {
 });
 
 
-router.put('/projects/:id/status', authMiddleware, async (req, res) => {
+router.put('/:id/status', authMiddleware, async (req, res) => {
   const { status } = req.body;
   
   try {
@@ -144,7 +144,7 @@ router.put('/projects/:id/status', authMiddleware, async (req, res) => {
   }
 });
 
-router.put('/projects/:id/mark-as-finished', authMiddleware, async (req, res) => {
+router.put('/:id/mark-as-finished', authMiddleware, async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
     if (!project) {
@@ -172,7 +172,7 @@ router.put('/projects/:id/mark-as-finished', authMiddleware, async (req, res) =>
 
 
 // Delete project
-router.delete('/projects/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   try {
     // Only allow the project creator to delete the project
     const project = await Project.findOneAndDelete({ _id: req.params.id, createdBy: req.user.id });
