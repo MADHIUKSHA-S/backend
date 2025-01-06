@@ -14,7 +14,10 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: 'https://frontend-xi-two-35.vercel.app/' }));
-
+app.get('/', (req, res) => {
+    res.send('API is running...');
+  });
+  
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes); // Correctly use taskRoutes
